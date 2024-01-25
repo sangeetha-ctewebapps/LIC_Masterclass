@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lic.epgs.mst.entity.AnnuityPurchasedBy;
@@ -26,7 +27,7 @@ public class AnnuityPurchasedByController {
 
 	String className = this.getClass().getSimpleName();
 
-	 @GetMapping("/annuitypurchased")
+	@GetMapping("/annuitypurchased")
 	public List<AnnuityPurchasedBy> getAllAnnuityPurchasedBy() throws ResourceNotFoundException, AnnuityPurchasedByServiceException {
 		String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 		LoggingUtil.logInfo(className, methodName, "Started");
@@ -56,12 +57,15 @@ public class AnnuityPurchasedByController {
 	}
 
 	@GetMapping("/annuitypurchasedByCode/{code}")
-	public ResponseEntity<AnnuityPurchasedBy> getAnnuityPurchasedByByCode(@PathVariable String code) {
+	public ResponseEntity<AnnuityPurchasedBy> getAnnuityPurchasedByByCode(@PathVariable String code, @RequestParam(required = false) String name) {
 		String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 		LoggingUtil.logInfo(className, methodName, "Started" + code);
 
-		return ResponseEntity.ok().body(annuitypurchasedbyService.findByCode(code));
-
+		if (name != null) {
+			return ResponseEntity.ok().body(annuitypurchasedbyService.findByCodeAndName(code, name));
+		} else {
+			return ResponseEntity.ok().body(annuitypurchasedbyService.findByCode(code));
+		}
 	}
 
 }
