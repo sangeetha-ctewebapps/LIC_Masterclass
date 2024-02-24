@@ -14,4 +14,6 @@ public interface AnnuityReqTypeService {
 
 	public AnnuityReqType getAnnuityByCode(String code);
 
+	// New method to get annuity by name
+	public AnnuityReqType getAnnuityByName(String name) throws ResourceNotFoundExceptionbyname;
 }
