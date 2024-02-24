@@ -27,7 +27,7 @@ public class AnnuityReqTypeController {
 	String className = this.getClass().getSimpleName();
 	private static final Logger logger = LoggerFactory.getLogger(AnnuityReqTypeController.class);
 
-	 @GetMapping("/annuity")
+	@GetMapping("/annuity")
 	public List<AnnuityReqType> getAllAnnuityReqTypes()
 			throws ResourceNotFoundException, AnnuityReqTypeServiceException {
 		String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
@@ -64,4 +64,15 @@ public class AnnuityReqTypeController {
 		return ResponseEntity.ok().body(annuityService.getAnnuityByCode(code));
 	}
 
+	@GetMapping("/annuity/name/{name}")
+	public ResponseEntity<AnnuityReqType> getAnnuityByName(@PathVariable String name) {
+		String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+		LoggingUtil.logInfo(className, methodName, "Started");
+		logger.info("annuity required type search by Name");
+		AnnuityReqType annuity = annuityService.getAnnuityByName(name);
+		if (annuity == null) {
+			throw new ResourceNotFoundException("ResourceNotFoundExceptionbyname");
+		}
+		return ResponseEntity.ok().body(annuity);
+	}
 }
