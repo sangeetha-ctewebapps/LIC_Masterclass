@@ -27,7 +27,6 @@ public class AnnuityReqTypeServiceImpl implements AnnuityReqTypeService {
 	private static final Logger logger = LoggerFactory.getLogger(AnnuityReqTypeController.class);
 
 	@Override
-	//@Cacheable()
 	public List<AnnuityReqType> getAllAnnuity() {
 		String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 		LoggingUtil.logInfo(className, methodName, "Started");
@@ -35,7 +34,6 @@ public class AnnuityReqTypeServiceImpl implements AnnuityReqTypeService {
 	}
 
 	@Override
-	//@Cacheable(value = "masterCache", key = "#annuityId")
 	public AnnuityReqType getAnnuityById(long annuityId) {
 		String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 		Optional<AnnuityReqType> annuityDb = this.annuityRepository.findById(annuityId);
@@ -59,8 +57,21 @@ public class AnnuityReqTypeServiceImpl implements AnnuityReqTypeService {
 			logger.info("annuity type is not found with code" + annuityCode);
 			return annuityDb.get();
 		} else {
-
 			throw new ResourceNotFoundException("annuity not found with code:" + annuityCode);
+		}
+	}
+
+	@Override
+	public AnnuityReqType getAnnuityByName(String annuityName) {
+		String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+		Optional<AnnuityReqType> annuityDb = this.annuityRepository.findByName(annuityName);
+		LoggingUtil.logInfo(className, methodName, "Started");
+		LoggingUtil.logInfo(className, methodName, "Search for annuity By name" + annuityName);
+		if (annuityDb.isPresent()) {
+			logger.info("annuity type is found with name" + annuityName);
+			return annuityDb.get();
+		} else {
+			throw new ResourceNotFoundException("annuity not found with name:" + annuityName);
 		}
 	}
 }
